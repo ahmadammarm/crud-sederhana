@@ -1,26 +1,35 @@
         @extends('layouts.master')
-        @section('content')
         <h1 class="text-center pt-3">Data Mahasiswa</h1>
-       <!-- START FORM -->
+        <!-- START FORM -->
+        @section('content')
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
        <form action='{{url('mahasiswa')}}' method='post'>
         @csrf
         <div class="my-3 p-3 bg-body rounded shadow-sm">
             <div class="mb-3 row">
                 <label for="nim" class="col-sm-2 col-form-label">NIM</label>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" name='nim' id="nim" autocomplete="off">
+                    <input type="number" class="form-control" name='nim' value="{{Session::get('nim')}}" id="nim" autocomplete="off">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="nama" class="col-sm-2 col-form-label">Nama</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name='nama' id="nama" autocomplete="off">
+                    <input type="text" class="form-control" value="{{Session::get('nama')}}" name='nama' id="nama" autocomplete="off">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="jurusan" class="col-sm-2 col-form-label">Jurusan</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name='jurusan' id="jurusan" autocomplete="off">
+                    <input type="text" class="form-control" value="{{Session::get('jurusan')}}" name='jurusan' id="jurusan" autocomplete="off">
                 </div>
             </div>
             <div class="mb-3 row">
