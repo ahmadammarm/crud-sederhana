@@ -22,7 +22,8 @@ class MahasiswaController extends Controller
      */
     public function create()
     {
-        return view('mahasiswa.create');
+        $data = mahasiswa::orderBy('nim', 'desc')->get();
+        return view('mahasiswa.index')->with('data', $data);
     }
 
     /**
@@ -51,6 +52,7 @@ class MahasiswaController extends Controller
         ];
 
         mahasiswa::create($data);
+        return redirect()->to('mahasiswa')->with('success', 'Data mahasiswa berhasil ditambahkan');
     }
 
     /**
