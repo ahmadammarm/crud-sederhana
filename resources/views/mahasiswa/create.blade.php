@@ -5,6 +5,7 @@
        <form action='{{url('mahasiswa')}}' method='post'>
         @csrf
         <div class="my-3 p-3 bg-body rounded shadow-sm">
+            <a href="{{url('mahasiswa')}}" class="btn btn-secondary">Kembali</a>
             <div class="mb-3 row">
                 <label for="nim" class="col-sm-2 col-form-label">NIM</label>
                 <div class="col-sm-10">

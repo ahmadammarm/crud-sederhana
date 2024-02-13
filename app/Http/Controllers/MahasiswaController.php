@@ -12,9 +12,20 @@ class MahasiswaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('mahasiswa.index');
+
+        $katakunci = $request->katakunci;
+        $jumlahBaris = 4;
+        if(strlen($katakunci)){
+            $data = mahasiswa::where('nim', 'like', "%$katakunci%")
+            ->orWhere('nama', 'like', "%$katakunci%")
+            ->paginate($jumlahBaris);
+        }
+        else {
+            $data = mahasiswa::orderBy('nim', 'desc')->paginate($jumlahBaris);
+        }
+        return view('mahasiswa.index')->with('data', $data);
     }
 
     /**
@@ -22,8 +33,7 @@ class MahasiswaController extends Controller
      */
     public function create()
     {
-        $data = mahasiswa::orderBy('nim', 'desc')->get();
-        return view('mahasiswa.index')->with('data', $data);
+        return view('mahasiswa.create');
     }
 
     /**
@@ -34,6 +44,7 @@ class MahasiswaController extends Controller
         Session::flash('nim', $request->nim);
         Session::flash('nama', $request->nama);
         Session::flash('jurusan', $request->jurusan);
+
         $request->validate([
             'nim'=>'required|numeric|unique:mahasiswa,nim',
             'nama'=>'required',
@@ -68,7 +79,8 @@ class MahasiswaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = mahasiswa::where('nim', $id)->first();
+        return view('mahasiswa.edit')->with('data', $data);
     }
 
     /**
@@ -76,7 +88,20 @@ class MahasiswaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'nama'=>'required',
+            'jurusan'=>'required',
+        ],[
+            'nama.required'=>'Nama wajib diisi',
+            'jurusan.required'=>'Jurusan wajib diisi',
+        ]);
+        $data = [
+            'nama'=>$request->nama,
+            'jurusan'=>$request->jurusan,
+        ];
+
+        mahasiswa::where('nim', $id)->update($data);
+        return redirect()->to('mahasiswa')->with('success', 'Data mahasiswa berhasil diubah');
     }
 
     /**
@@ -84,6 +109,7 @@ class MahasiswaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        mahasiswa::where('nim', $id)->delete();
+        return redirect()->to('mahasiswa')->with('success', 'Data mahasiswa berhasil dihapus');
     }
 }
