@@ -48,7 +48,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                  {{$data->links()}}
+                  {{$data->withQueryString()->links()}}
           </div>
           <!-- AKHIR DATA -->
           @endsection
